@@ -1,0 +1,32 @@
+#!/bin/bash
+
+WORKING_PATH=$0
+SCRIPT_PATH=$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )
+USERNAME=$1
+
+# cat config/sources.list
+
+
+
+BASE_PKGS="openbox sudo lightdm xcompmgr tint2 synapse pulseaudio pavucontrol pasystray gvfs-backends notification-daemon"
+UTIL_PKGS="xclip snapd flatpak flameshot copyq zim guake vim blueman xscreensaver qalculate-gtk file-roller nomacs curl leafpad libreoffice"
+MISC_PKG="arj jlha-utils lzip xz-utils lzop ncompress rpm2cpio rzip sharutils unace unalz unar unzip xz-utils zip zoo "
+FM_PKG="thunar thunar-archive-plugin thunar-gtkhash thunar-media-tags-plugin thunar-vcs-plugin thunar-volman"
+ENTERTAINMENT_PKGS="steam deluge clementine smplayer"
+
+dpkg --add-architecture i386
+
+apt update
+apt install -y $BASE_PKGS $FM_PKG $UTIL_PKGS $ENTERTAINMENT_PKGS $MISC_PKG
+
+. $SCRIPT_PATH/helpers/downloads.sh
+. $SCRIPT_PATH/helpers/utils.sh
+. $SCRIPT_PATH/helpers/setconfig.sh
+
+as_user $USERNAME "wget https://telegram.org/dl/desktop/linux -O telegram.tar.xz"
+
+LATEST_CODIUM_VER=`curl --silent "https://api.github.com/repos/VSCodium/vscodium/releases/latest" | grep -E "browser_download_url.*?_amd64\.deb\"" | sed -E 's/.*"([^"]+)".*/\1/'`
+
+as_user $USERNAME "mkdir tempdownloads"
+as_user $USERNAME "wget https://telegram.org/dl/desktop/linux -O tempdownloads/telegram.tar.xz"
+as_user $USERNAME "wget LATEST_CODIUM_VER -O tempdownloads/codium.deb"

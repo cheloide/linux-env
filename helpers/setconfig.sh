@@ -1,9 +1,5 @@
 #!/bin/bash
 
-function as_user {
-    echo $2 | su $1 -l -c $0
-}
-
 function create_autostart {
     USERNAME=$1
     NAME=$2
@@ -17,7 +13,7 @@ Exec=$EXEC
 Terminal=false"
 
     as_user $USERNAME "mkdir -p ~/.config/autostart/"
-    as_user $USERNAME "echo $DESKTOP_FILE > ~/.config/autostart/$NAME.desktop"
+    as_user $USERNAME "echo \"$DESKTOP_FILE\" > ~/.config/autostart/$NAME.desktop"
 
 }
 
@@ -39,5 +35,5 @@ Comment=$COMMENT
 Terminal=false"
 
     as_user $USERNAME "mkdir -p ~/.local/share/applications"
-    as_user $USERNAME "echo $DESKTOP_FILE > ~/.local/share/applications/$NAME.desktop"
+    as_user $USERNAME "echo \"$DESKTOP_FILE\" > ~/.local/share/applications/$NAME.desktop"
 }

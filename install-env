@@ -21,8 +21,7 @@ apt install -y $BASE_PKGS $FM_PKG $UTIL_PKGS $ENTERTAINMENT_PKGS $MISC_PKG
 LATEST_CODIUM_VER=`curl --silent "https://api.github.com/repos/VSCodium/vscodium/releases/latest" | grep -E "browser_download_url.*?_amd64\.deb\"" | sed -E 's/.*"([^"]+)".*/\1/'`
 
 mkdir -p  /etc/X11/xorg.d
-mkdir -p /tmp/tempdownloads/deb
-mkdir -p /tmp/tempdownloads/config
+mkdir -p /tmp/tempdownloads/{deb,config}
 wget $LATEST_CODIUM_VER -O /tmp/tempdownloads/deb/codium.deb
 dpkg -i /tmp/tempdownloads/deb/*.deb
 apt install -f

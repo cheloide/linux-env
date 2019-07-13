@@ -30,25 +30,25 @@ apt install -f
 snap install mailspring telegram-desktop
 
 
-. $SCRIPT_PATH/helpers/downloads.sh
+# . $SCRIPT_PATH/helpers/downloads.sh
 . $SCRIPT_PATH/helpers/utils.sh
 . $SCRIPT_PATH/helpers/setconfig.sh
 
-create_autostart $USERNAME "xcompmgr" "xcompmgr"
-create_autostart $USERNAME "tint2" "tint2"
-create_autostart $USERNAME "synapse" "synapse --startup"
-create_autostart $USERNAME "steam" "steam -silent %U"
-create_autostart $USERNAME "telegram" "snap run telegram-desktop -startintray "
-create_autostart $USERNAME "zim" "zim --plugin trayicon"
-create_autostart $USERNAME "feh" 'feh --bg-scale /home/marcelo/.wallpapers/$(ls /home/marcelo/.wallpapers |sort -R |tail --lines=1)'
-create_autostart $USERNAME "flameshot" "flameshot"
-create_autostart $USERNAME "mailspring" "snap run mailspring --background %U"
-create_autostart $USERNAME "guake" "guake"
-create_autostart $USERNAME "deluge-gtk" "deluge-gtk %U"
-create_autostart $USERNAME "copyq" "copyq"
-create_autostart $USERNAME "numlockx" "numlockx on"
-create_autostart $USERNAME "numlockx" "xset -dpms s off"
-create_autostart $USERNAME "numlockx" "xset -dpms s off"
+create_autostart "$USERNAME" "xcompmgr" "xcompmgr"
+create_autostart "$USERNAME" "tint2" "tint2"
+create_autostart "$USERNAME" "synapse" "synapse --startup"
+create_autostart "$USERNAME" "steam" "steam -silent %U"
+create_autostart "$USERNAME" "telegram" "snap run telegram-desktop -startintray "
+create_autostart "$USERNAME" "zim" "zim --plugin trayicon"
+create_autostart "$USERNAME" "feh" 'feh --bg-scale /home/marcelo/.wallpapers/$(ls /home/marcelo/.wallpapers |sort -R |tail --lines=1)'
+create_autostart "$USERNAME" "flameshot" "flameshot"
+create_autostart "$USERNAME" "mailspring" "snap run mailspring --background %U"
+create_autostart "$USERNAME" "guake" "guake"
+create_autostart "$USERNAME" "deluge-gtk" "deluge-gtk %U"
+create_autostart "$USERNAME" "copyq" "copyq"
+create_autostart "$USERNAME" "numlockx" "numlockx on"
+create_autostart "$USERNAME" "numlockx" "xset -dpms s off"
+create_autostart "$USERNAME" "numlockx" "xset -dpms s off"
 
 wget https://gist.github.com/Cheloide/6779daeed158c2b228ea857f53eeb2bb/raw/9fdd79106adb8fd71cc645badc58e30a355bd024/rc.xml -O /tmp/tempdownloads/config/rc.xml
 wget https://gist.githubusercontent.com/Cheloide/523157f3de0b9e4e7599b090c8886c18/raw/bb8305adadcb1c3ca739be2a5584dbf425644810/00keyboard.conf -O /etc/X11/xorg.d/00keyboard.conf

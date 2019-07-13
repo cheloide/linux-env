@@ -40,7 +40,7 @@ create_autostart "$USERNAME" "synapse" "synapse --startup"
 create_autostart "$USERNAME" "steam" "steam -silent %U"
 create_autostart "$USERNAME" "telegram" "snap run telegram-desktop -startintray "
 create_autostart "$USERNAME" "zim" "zim --plugin trayicon"
-create_autostart "$USERNAME" "feh" 'feh --bg-scale /home/marcelo/.wallpapers/$(ls /home/marcelo/.wallpapers |sort -R |tail --lines=1)'
+create_autostart "$USERNAME" "feh" "feh --bg-scale /home/$USERNAME/.wallpapers/\$(ls /home/marcelo/.wallpapers |sort -R |tail --lines=1)"
 create_autostart "$USERNAME" "flameshot" "flameshot"
 create_autostart "$USERNAME" "mailspring" "snap run mailspring --background %U"
 create_autostart "$USERNAME" "guake" "guake"

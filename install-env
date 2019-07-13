@@ -7,26 +7,52 @@ USERNAME=$1
 # cat config/sources.list
 
 
+dpkg --add-architecture i386
+apt update
 
-BASE_PKGS="openbox sudo lightdm xcompmgr tint2 synapse pulseaudio pavucontrol pasystray gvfs-backends notification-daemon"
-UTIL_PKGS="xclip snapd flatpak flameshot copyq zim guake vim blueman xscreensaver qalculate-gtk file-roller nomacs curl leafpad libreoffice"
+BASE_PKGS="openbox sudo lightdm xcompmgr tint2 synapse pulseaudio pavucontrol pasystray gvfs-backends notification-daemon feh"
+UTIL_PKGS="xclip snapd flatpak flameshot copyq zim guake vim blueman xscreensaver qalculate-gtk file-roller nomacs curl leafpad libreoffice tig meld gnome-keyring numlockx"
 MISC_PKG="arj jlha-utils lzip xz-utils lzop ncompress rpm2cpio rzip sharutils unace unalz unar unzip xz-utils zip zoo "
 FM_PKG="thunar thunar-archive-plugin thunar-gtkhash thunar-media-tags-plugin thunar-vcs-plugin thunar-volman"
-ENTERTAINMENT_PKGS="steam deluge clementine smplayer"
+ENTERTAINMENT_PKGS="steam deluge-gtk clementine smplayer"
 
-dpkg --add-architecture i386
-
-apt update
 apt install -y $BASE_PKGS $FM_PKG $UTIL_PKGS $ENTERTAINMENT_PKGS $MISC_PKG
+
+LATEST_CODIUM_VER=`curl --silent "https://api.github.com/repos/VSCodium/vscodium/releases/latest" | grep -E "browser_download_url.*?_amd64\.deb\"" | sed -E 's/.*"([^"]+)".*/\1/'`
+
+mkdir -p  /etc/X11/xorg.d
+mkdir -p /tmp/tempdownloads/deb
+mkdir -p /tmp/tempdownloads/config
+wget $LATEST_CODIUM_VER -O /tmp/tempdownloads/deb/codium.deb
+dpkg -i /tmp/tempdownloads/deb/*.deb
+apt install -f
+
+#SNAPS
+snap install mailspring telegram-desktop
+
 
 . $SCRIPT_PATH/helpers/downloads.sh
 . $SCRIPT_PATH/helpers/utils.sh
 . $SCRIPT_PATH/helpers/setconfig.sh
 
-as_user $USERNAME "wget https://telegram.org/dl/desktop/linux -O telegram.tar.xz"
+create_autostart $USERNAME "xcompmgr" "xcompmgr"
+create_autostart $USERNAME "tint2" "tint2"
+create_autostart $USERNAME "synapse" "synapse --startup"
+create_autostart $USERNAME "steam" "steam -silent %U"
+create_autostart $USERNAME "telegram" "snap run telegram-desktop -startintray "
+create_autostart $USERNAME "zim" "zim --plugin trayicon"
+create_autostart $USERNAME "feh" 'feh --bg-scale /home/marcelo/.wallpapers/$(ls /home/marcelo/.wallpapers |sort -R |tail --lines=1)'
+create_autostart $USERNAME "flameshot" "flameshot"
+create_autostart $USERNAME "mailspring" "snap run mailspring --background %U"
+create_autostart $USERNAME "guake" "guake"
+create_autostart $USERNAME "deluge-gtk" "deluge-gtk %U"
+create_autostart $USERNAME "copyq" "copyq"
+create_autostart $USERNAME "numlockx" "numlockx on"
+create_autostart $USERNAME "numlockx" "xset -dpms s off"
+create_autostart $USERNAME "numlockx" "xset -dpms s off"
 
-LATEST_CODIUM_VER=`curl --silent "https://api.github.com/repos/VSCodium/vscodium/releases/latest" | grep -E "browser_download_url.*?_amd64\.deb\"" | sed -E 's/.*"([^"]+)".*/\1/'`
+wget https://gist.github.com/Cheloide/6779daeed158c2b228ea857f53eeb2bb/raw/9fdd79106adb8fd71cc645badc58e30a355bd024/rc.xml -O /tmp/tempdownloads/config/rc.xml
+wget https://gist.githubusercontent.com/Cheloide/523157f3de0b9e4e7599b090c8886c18/raw/bb8305adadcb1c3ca739be2a5584dbf425644810/00keyboard.conf -O /etc/X11/xorg.d/00keyboard.conf
 
-as_user $USERNAME "mkdir tempdownloads"
-as_user $USERNAME "wget https://telegram.org/dl/desktop/linux -O tempdownloads/telegram.tar.xz"
-as_user $USERNAME "wget LATEST_CODIUM_VER -O tempdownloads/codium.deb"
+as_user $USERNAME "mkdir -p ~/.config/openbox/"
+as_user $USERNAME "cp /tmp/tempdownloads/config/rc.xml ~/.config/openbox/rc.xml "

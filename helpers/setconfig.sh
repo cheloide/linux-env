@@ -12,6 +12,7 @@ Name=$NAME
 Exec=$EXEC
 Terminal=false"
 
+    as_user $USERNAME "mkdir -p ~/.config/autostart/"
     as_user $USERNAME "echo $DESKTOP_FILE > ~/.config/autostart/$name.desktop"
 
 }
@@ -33,6 +34,6 @@ Exec=$EXEC
 Comment=$COMMENT
 Terminal=false"
 
-    as_user $USERNAME "mkdir -p ~/.config/.local/share/applications"
-    as_user $USERNAME "echo $DESKTOP_FILE > ~/.config/.local/share/applications/$name.desktop"
+    as_user $USERNAME "mkdir -p ~/.local/share/applications"
+    as_user $USERNAME "echo $DESKTOP_FILE > ~/.local/share/applications/$name.desktop"
 }

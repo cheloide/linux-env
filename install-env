@@ -16,7 +16,7 @@ MISC_PKG="arj jlha-utils lzip xz-utils lzop ncompress rpm2cpio rzip sharutils un
 FM_PKG="thunar thunar-archive-plugin thunar-gtkhash thunar-media-tags-plugin thunar-vcs-plugin thunar-volman"
 ENTERTAINMENT_PKGS="steam deluge-gtk clementine smplayer"
 
-apt install -y $BASE_PKGS $FM_PKG $UTIL_PKGS $ENTERTAINMENT_PKGS $MISC_PKG
+bash -c "apt install -y $BASE_PKGS $FM_PKG $UTIL_PKGS $ENTERTAINMENT_PKGS $MISC_PKG"
 
 LATEST_CODIUM_VER=`curl --silent "https://api.github.com/repos/VSCodium/vscodium/releases/latest" | grep -E "browser_download_url.*?_amd64\.deb\"" | sed -E 's/.*"([^"]+)".*/\1/'`
 

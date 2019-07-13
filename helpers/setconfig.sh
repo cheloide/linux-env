@@ -1,5 +1,9 @@
 #!/bin/bash
 
+function as_user {
+    echo $2 | su $1 -l -c $0
+}
+
 function create_autostart {
     USERNAME=$1
     NAME=$2

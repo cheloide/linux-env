@@ -10,7 +10,7 @@ USERNAME=$1
 dpkg --add-architecture i386
 apt update
 
-BASE_PKGS="openbox sudo lightdm xcompmgr tint2 synapse pulseaudio pavucontrol pasystray gvfs-backends notification-daemon feh"
+BASE_PKGS="openbox sudo lightdm xcompmgr tint2 synapse pulseaudio pavucontrol pasystray gvfs-backends notification-daemon feh firefox-esr"
 UTIL_PKGS="xclip snapd flatpak flameshot copyq zim guake vim blueman xscreensaver qalculate-gtk file-roller nomacs curl libreoffice tig meld gnome-keyring numlockx lxterminal"
 MISC_PKG="arj jlha-utils lzip xz-utils lzop ncompress rpm2cpio rzip sharutils unace unalz unar unzip xz-utils zip "
 FM_PKG="thunar thunar-archive-plugin thunar-gtkhash thunar-media-tags-plugin thunar-vcs-plugin thunar-volman"

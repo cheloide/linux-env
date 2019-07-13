@@ -55,3 +55,4 @@ wget https://gist.githubusercontent.com/Cheloide/523157f3de0b9e4e7599b090c8886c1
 
 as_user $USERNAME "mkdir -p ~/.config/openbox/"
 as_user $USERNAME "cp /tmp/tempdownloads/config/rc.xml ~/.config/openbox/rc.xml "
+as_user $USERNAME "echo \"$(cat $SCRIPT_PATH/config/tint2rc )\"| tee ~/.config/tint2/tint2rc"

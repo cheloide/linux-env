@@ -74,6 +74,8 @@ create_autostart "$USERNAME" 'deluge-gtk'   'deluge-gtk'
 create_autostart "$USERNAME" 'copyq'        'copyq'
 create_autostart "$USERNAME" 'numlockx'     'numlockx on'
 create_autostart "$USERNAME" 'nosleep'      'xset -dpms s off'
+create_autostart "$USERNAME" 'connman-gtk'  'connman-gtk --tray '
+ 
 
 
 runuser $USERNAME -l -c "wget https://gist.github.com/Cheloide/6779daeed158c2b228ea857f53eeb2bb/raw/rc.xml -O /home/$USERNAME/.config/openbox/rc.xml"

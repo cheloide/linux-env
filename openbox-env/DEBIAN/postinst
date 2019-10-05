@@ -1,0 +1,86 @@
+#!/bin/bash
+
+##SYSTEM WIDE
+
+mkdir -p /etc/X11/xorg.conf.d
+mkdir -p /etc/X11/Xsession.d
+
+
+
+echo "Setting default keyboard to \"us altgr-intl\" (/etc/X11/xorg.conf.d/00keyboard.conf)"
+wget https://gist.githubusercontent.com/Cheloide/523157f3de0b9e4e7599b090c8886c18/raw/00keyboard.conf -O /etc/X11/xorg.conf.d/00keyboard.conf > /dev/null
+echo "Setting adding snap desktop folders to \$XDG_DATA_DIRS (/etc/X11/Xsession.d/65snappy)"
+wget https://gist.githubusercontent.com/cheloide/2391b42e9dca4cdaa956531493421874/raw/65snappy -O /etc/X11/Xsession.d/65snappy > /dev/null
+
+echo "Installing Codium (https://vscodium.com/)"
+
+LATEST_CODIUM_VER=`curl --silent "https://api.github.com/repos/VSCodium/vscodium/releases/latest" | grep -E "browser_download_url.*?_amd64\.deb\"" | sed -E 's/.*"([^"]+)".*/\1/'`
+TEMP_DIR=$(mktemp -d)
+wget $LATEST_CODIUM_VER -O $TEMP_DIR/codium.deb
+dpkg -i  $TEMP_DIR/*.deb
+apt install -f
+sed -i 's%inode/directory;%%' /usr/share/applications/codium.desktop
+rm -f $TEMP_DIR
+
+
+##USER SPECIFIC
+
+function create_autostart {
+
+    USERNAME=$1
+    NAME=$2
+    EXEC=$3
+
+    runuser $USERNAME -l -c "mkdir -p ~/.config/autostart/"
+    runuser $USERNAME -l -c "printf \"[Desktop Entry]\nEncoding=UTF-8\nType=Application\nName=%s\nExec=%s\nTerminal=false\" \"$NAME\" \"$EXEC\" | tee \"\$HOME/.config/autostart/$NAME.desktop\""
+
+}
+
+
+while [ -z $USERNAME_EXISTS ] || [ $USERNAME_EXISTS != 0 ];
+do
+    
+    read -p "Input the username to setup, leave blank to skip: " USERNAME
+
+    if [ -z "$USERNAME" ]; then
+        echo "Nothing more to do... exiting."
+        exit 0
+    fi
+    
+    getent passwd "$USERNAME" > /dev/null
+    USERNAME_EXISTS=$?
+
+    if [ $USERNAME_EXISTS != 0 ]; then
+        echo "Invalid Username."
+    fi
+done
+
+runuser $USERNAME -l -c "mkdir -p ~/.config/autostart"
+runuser $USERNAME -l -c "mkdir -p ~/.config/openbox"
+
+create_autostart "$USERNAME" 'xcompmgr'     'xcompmgr'
+create_autostart "$USERNAME" 'tint2'        'tint2'
+create_autostart "$USERNAME" 'synapse'      'synapse --startup'
+create_autostart "$USERNAME" 'steam'        'steam -silent'
+create_autostart "$USERNAME" 'telegram'     'snap run telegram-desktop -startintray '
+create_autostart "$USERNAME" 'zim'          'zim --plugin trayicon'
+create_autostart "$USERNAME" 'feh'          'bash -c "feh --bg-scale /home/$USER/.wallpapers/$(ls /home/$USER/.wallpapers |sort -R |tail --lines=1 )'
+create_autostart "$USERNAME" 'flameshot'    'flameshot'
+create_autostart "$USERNAME" 'mailspring'   'snap run mailspring --background'
+create_autostart "$USERNAME" 'guake'        'guake'
+create_autostart "$USERNAME" 'deluge-gtk'   'deluge-gtk'
+create_autostart "$USERNAME" 'copyq'        'copyq'
+create_autostart "$USERNAME" 'numlockx'     'numlockx on'
+create_autostart "$USERNAME" 'nosleep'      'xset -dpms s off'
+
+
+runuser $USERNAME -l -c "wget https://gist.github.com/Cheloide/6779daeed158c2b228ea857f53eeb2bb/raw/rc.xml -O /home/$USERNAME/.config/openbox/rc.xml"
+
+read -p "set $USERNAME as superuser (y/n, default: Yes)" SUPERUSER
+
+ if [ -z "${SUPERUSER}" ] || [ "${SUPERUSER,,}" = "y" ] || [ "${SUPERUSER,,}" = "yes" ]; then
+    echo "Executing \"/sbin/usermod -aG sudo $USERNAME\""
+    /sbin/usermod -aG sudo $USERNAME
+ else
+    echo "Skipping superuser configuration for user $USERNAME"
+ fi

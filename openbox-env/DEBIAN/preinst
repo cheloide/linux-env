@@ -1,0 +1,22 @@
+#!/bin/bash
+
+#BUSTER
+echo "#------------------------------------------------------------------------------#" >  /etc/apt/sources.list
+echo "#                   OFFICIAL DEBIAN REPOS                                       " >> /etc/apt/sources.list
+echo "#------------------------------------------------------------------------------#" >> /etc/apt/sources.list
+echo ""                                                                                 >> /etc/apt/sources.list
+echo "###### Debian Main Repos"                                                         >> /etc/apt/sources.list
+echo "deb http://deb.debian.org/debian/ stable main contrib non-free"                   >> /etc/apt/sources.list
+echo "deb-src http://deb.debian.org/debian/ stable main contrib non-free"               >> /etc/apt/sources.list
+echo ""                                                                                 >> /etc/apt/sources.list
+echo "deb http://deb.debian.org/debian/ stable-updates main contrib non-free"           >> /etc/apt/sources.list
+echo "deb-src http://deb.debian.org/debian/ stable-updates main contrib non-free"       >> /etc/apt/sources.list
+echo ""                                                                                 >> /etc/apt/sources.list
+echo "deb http://deb.debian.org/debian-security stable/updates main"                    >> /etc/apt/sources.list
+echo "deb-src http://deb.debian.org/debian-security stable/updates main"                >> /etc/apt/sources.list
+echo ""                                                                                 >> /etc/apt/sources.list
+echo "deb http://ftp.debian.org/debian buster-backports main"                           >> /etc/apt/sources.list
+echo "deb-src http://ftp.debian.org/debian buster-backports main"                       >> /etc/apt/sources.list
+
+dpkg --add-architecture i386
+apt-get update

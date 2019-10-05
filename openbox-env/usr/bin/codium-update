@@ -1,0 +1,16 @@
+#!/bin/bash
+
+if [ $(id -u) != 0 ]; then
+    echo "Not running as root/superuser... Exiting."
+    exit 0
+fi
+
+echo "Updating/Installing Codium"
+
+LATEST_CODIUM_VER=`curl --silent "https://api.github.com/repos/VSCodium/vscodium/releases/latest" | grep -E "browser_download_url.*?_amd64\.deb\"" | sed -E 's/.*"([^"]+)".*/\1/'`
+TEMP_DIR=$(mktemp -d)
+wget $LATEST_CODIUM_VER -O $TEMP_DIR/codium.deb
+dpkg -i  $TEMP_DIR/*.deb
+apt install -f
+
+rm -f $TEMP_DIR

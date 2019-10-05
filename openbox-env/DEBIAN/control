@@ -1,0 +1,11 @@
+Package: openbox-env
+Version: 0.0.1
+Section: base
+Priority: optional
+Architecture: all
+Depends: openbox, sudo, git, lightdm, xcompmgr, tint2, synapse, pulseaudio, pavucontrol, pasystray, gvfs-backends, notification-daemon, feh, firefox-esr, xclip, snapd, flameshot, copyq, zim, guake, vim, blueman, xscreensaver, qalculate-gtk, file-roller, nomacs, curl, libreoffice, tig, meld, gnome-keyring, numlockx, lxterminal, arj, jlha-utils, lzip, xz-utils, lzop, ncompress, rpm2cpio, rzip, sharutils, unace, unalz, unar, unzip, xz-utils, zip, thunar, thunar-archive-plugin, thunar-gtkhash, thunar-media-tags-plugin, thunar-vcs-plugin, thunar-volman, deluge, clementine, mpv, audacious, aria2, connman, connman-gtk
+Recomended: steam
+Maintainer: Marcelo González <11063780+cheloide@users.noreply.github.com>
+Description: openbox-env, Sets up openbox environment.
+Homepage: https://github.com/cheloide/linux-env
+

@@ -22,6 +22,8 @@ apt install -f
 sed -i 's%inode/directory;%%' /usr/share/applications/codium.desktop
 rm -f $TEMP_DIR
 
+echo "Installing Snaps (https://snapcraft.io/)"
+snap install mailspring telegram-desktop
 
 ##USER SPECIFIC
 

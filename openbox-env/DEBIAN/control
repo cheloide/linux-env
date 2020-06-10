@@ -1,5 +1,5 @@
 Package: openbox-env
-Version: 0.0.2
+Version: 0.0.4
 Section: base
 Priority: optional
 Architecture: all

@@ -8,19 +8,13 @@ mkdir -p /etc/X11/xorg.conf.d
 TMP_DIR=$(mktemp -d)
 
 FIREFOX_DOWNLOAD_PATH="$TMP_DIR/firefox.tar.bz2"
-ULAUNCHER_DOWNLOAD_PATH="$TMP_DIR//ulauncher.deb"
 
 echo "Setting default keyboard to \"us altgr-intl\" (/etc/X11/xorg.conf.d/00keyboard.conf)"
 wget 'https://gist.githubusercontent.com/Cheloide/523157f3de0b9e4e7599b090c8886c18/raw/00keyboard.conf' -O "/etc/X11/xorg.conf.d/00keyboard.conf"
 
-echo installing Latest version of Ulauncher
-LATEST_ULAUNCHER_URL=`curl --silent "https://api.github.com/repos/Ulauncher/Ulauncher/releases/latest" | grep -E "browser_download_url.*?\.deb\"" | sed -E 's/.*"([^"]+)".*/\1/'`
-wget "$LATEST_ULAUNCHER_URL" -O "$ULAUNCHER_DOWNLOAD_PATH"
-apt-get install "$ULAUNCHER_DOWNLOAD_PATH" -y
-
+chmod +x /usr/bin/ulauncher-update
 
 wget 'https://download.mozilla.org/?product=firefox-latest-ssl&os=linux64&lang=en-US' -O "$FIREFOX_DOWNLOAD_PATH"
-
 tar -xvjf "$FIREFOX_DOWNLOAD_PATH" -C /opt
 chown -R nobody:firefox /opt/firefox
 chmod -R u=g /opt/firefox/
@@ -31,6 +25,8 @@ update-alternatives --install /usr/bin/gnome-www-browser gnome-www-browser /opt/
 update-alternatives  --set firefox /opt/firefox/firefox
 update-alternatives  --set x-www-browser /opt/firefox/firefox
 update-alternatives  --set gnome-www-browser /opt/firefox/firefox
+
+rm -rf $TMP_DIR
 
 ##USER SPECIFIC
 

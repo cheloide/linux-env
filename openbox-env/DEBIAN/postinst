@@ -3,27 +3,36 @@
 ##SYSTEM WIDE
 
 mkdir -p /etc/X11/xorg.conf.d
-mkdir -p /etc/X11/Xsession.d
+/usr/sbin/groupadd firefox
+
+TMP_DIR=$(mktemp -d)
+
+FIREFOX_DOWNLOAD_PATH="$TMP_DIR/firefox.tar.bz2"
+
 
 
 
 echo "Setting default keyboard to \"us altgr-intl\" (/etc/X11/xorg.conf.d/00keyboard.conf)"
-wget https://gist.githubusercontent.com/Cheloide/523157f3de0b9e4e7599b090c8886c18/raw/00keyboard.conf -O /etc/X11/xorg.conf.d/00keyboard.conf > /dev/null
-echo "Setting adding snap desktop folders to \$XDG_DATA_DIRS (/etc/X11/Xsession.d/65snappy)"
-wget https://gist.githubusercontent.com/cheloide/2391b42e9dca4cdaa956531493421874/raw/65snappy -O /etc/X11/Xsession.d/65snappy > /dev/null
+wget 'https://gist.githubusercontent.com/Cheloide/523157f3de0b9e4e7599b090c8886c18/raw/00keyboard.conf' -O "/etc/X11/xorg.conf.d/00keyboard.conf"
 
-echo "Installing Codium (https://vscodium.com/)"
+echo installing Latest version of Ulauncher
+LATEST_ULAUNCHER_URL=`curl --silent "https://api.github.com/repos/Ulauncher/Ulauncher/releases/latest" | grep -E "browser_download_url.*?\.deb\"" | sed -E 's/.*"([^"]+)".*/\1/'`
+wget "$LATEST_ULAUNCHER_URL" -O $TMP_DIR/ulauncher.deb
+apt install "$TMP_DIR/ulauncher.deb" -y
 
-LATEST_CODIUM_VER=`curl --silent "https://api.github.com/repos/VSCodium/vscodium/releases/latest" | grep -E "browser_download_url.*?_amd64\.deb\"" | sed -E 's/.*"([^"]+)".*/\1/'`
-TEMP_DIR=$(mktemp -d)
-wget $LATEST_CODIUM_VER -O $TEMP_DIR/codium.deb
-dpkg -i  $TEMP_DIR/*.deb
-apt install -f
-sed -i 's%inode/directory;%%' /usr/share/applications/codium.desktop
-rm -f $TEMP_DIR
 
-echo "Installing Snaps (https://snapcraft.io/)"
-snap install mailspring telegram-desktop
+wget 'https://download.mozilla.org/?product=firefox-latest-ssl&os=linux64&lang=en-US' -O "$FIREFOX_DOWNLOAD_PATH"
+
+tar -xvjf "$FIREFOX_DOWNLOAD_PATH" -C /opt
+chown -R nobody:firefox /opt/firefox
+chmod -R u=g /opt/firefox/
+
+update-alternatives --install /usr/bin/firefox firefox /opt/firefox/firefox 1000
+update-alternatives --install /usr/bin/x-www-browser x-www-browser /opt/firefox/firefox 1000
+update-alternatives --install /usr/bin/gnome-www-browser gnome-www-browser /opt/firefox/firefox 1000
+update-alternatives  --set firefox /opt/firefox/firefox
+update-alternatives  --set x-www-browser /opt/firefox/firefox
+update-alternatives  --set gnome-www-browser /opt/firefox/firefox
 
 ##USER SPECIFIC
 
@@ -60,21 +69,18 @@ done
 runuser $USERNAME -l -c "mkdir -p ~/.config/autostart"
 runuser $USERNAME -l -c "mkdir -p ~/.config/openbox"
 
-create_autostart "$USERNAME" 'xcompmgr'     'xcompmgr'
+create_autostart "$USERNAME" 'compton'     'compton'
 create_autostart "$USERNAME" 'tint2'        'tint2'
-create_autostart "$USERNAME" 'synapse'      'synapse --startup'
 create_autostart "$USERNAME" 'steam'        'steam -silent'
-create_autostart "$USERNAME" 'telegram'     'snap run telegram-desktop -startintray '
 create_autostart "$USERNAME" 'zim'          'zim --plugin trayicon'
 create_autostart "$USERNAME" 'feh'          'bash -c "feh --bg-scale /home/$USER/.wallpapers/$(ls /home/$USER/.wallpapers |sort -R |tail --lines=1 )'
 create_autostart "$USERNAME" 'flameshot'    'flameshot'
-create_autostart "$USERNAME" 'mailspring'   'snap run mailspring --background'
 create_autostart "$USERNAME" 'guake'        'guake'
 create_autostart "$USERNAME" 'deluge-gtk'   'deluge-gtk'
 create_autostart "$USERNAME" 'copyq'        'copyq'
 create_autostart "$USERNAME" 'numlockx'     'numlockx on'
 create_autostart "$USERNAME" 'nosleep'      'xset -dpms s off'
-create_autostart "$USERNAME" 'connman-gtk'  'connman-gtk --tray '
+create_autostart "$USERNAME" 'ulauncher'    'xset -dpms s off'
  
 
 
@@ -88,3 +94,5 @@ read -p "set $USERNAME as superuser (y/n, default: Yes)" SUPERUSER
  else
     echo "Skipping superuser configuration for user $USERNAME"
  fi
+
+/sbin/usermod -aG firefox $USERNAME

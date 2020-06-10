@@ -6,11 +6,13 @@ is_user_root() {
 
 if is_user_root; then
     TMP_DIR=$(mktemp -d)
-    ULAUNCHER_DOWNLOAD_PATH="$TMP_DIR//ulauncher.deb"
+    ULAUNCHER_DOWNLOAD_PATH="$TMP_DIR/ulauncher.deb"
     echo 'installing Latest version of Ulauncher'
     LATEST_ULAUNCHER_URL=`curl --silent "https://api.github.com/repos/Ulauncher/Ulauncher/releases/latest" | grep -E "browser_download_url.*?\.deb\"" | sed -E 's/.*"([^"]+)".*/\1/'`
     wget "$LATEST_ULAUNCHER_URL" -O "$ULAUNCHER_DOWNLOAD_PATH"
+    chown -R _apt:root "$TMP_DIR"
     apt-get install "$ULAUNCHER_DOWNLOAD_PATH" -y
+    rm -rf $TMP_DIR
 else
     echo 'Please run as superuser'
 fi
